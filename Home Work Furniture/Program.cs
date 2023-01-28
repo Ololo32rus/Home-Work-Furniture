@@ -19,11 +19,11 @@ namespace StructFurnitureShop
 {
     public enum ClassFurniture
     {
-        Economy,
-        MiddleClass,
-        Premium,
-        Luxury,
-        Deluxury,
+        Economy = 1,
+        MiddleClass = 2,
+        Premium = 3,
+        Luxury  = 4,
+        Deluxury = 5
     }
 
 
@@ -37,7 +37,7 @@ namespace StructFurnitureShop
             public int Id;
             public string Name;
             public double Weight;
-            public double Class;
+            public ClassFurniture classFurniture;
             public double Rating;
 
         }
@@ -154,7 +154,7 @@ namespace StructFurnitureShop
             }
             furniture.Name = InputString("Введите название мебели: ");
             furniture.Weight = InputDouble("Введите вес: ");
-            furniture.Class = InputDouble("Выберите класс мебели: \n 1. Эконом \n 2. Средний класс \n 3. Премиум \n 4. Люкс \n 5. ДеЛюкс \n");
+            furniture.classFurniture = (ClassFurniture)InputInt("Выберите класс мебели: \n 1. Эконом \n 2. Средний класс \n 3. Премиум \n 4. Люкс \n 5. ДеЛюкс \n");
             furniture.Rating = InputDouble("Введите рейтинг покупателей: ");
 
             return furniture;
@@ -166,14 +166,14 @@ namespace StructFurnitureShop
             furniture.Id = 0;
             furniture.Name = "";
             furniture.Weight = 0;
-            furniture.Class = 0;
+            furniture.classFurniture = 0;
             furniture.Rating = 0;
             return furniture;
         }
 
         static void PrintFurniture(Furniture furniture) //печать 1го элемента(любой)
         {
-            Console.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}",furniture.Id, furniture.Name, furniture.Weight, furniture.Class, furniture.Rating);
+            Console.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}",furniture.Id, furniture.Name, furniture.Weight, furniture.classFurniture, furniture.Rating);
         }
 
         static void PrintManyFurnitures(Furniture[] furnitures) //печать всех элементов(весь перечень)
@@ -195,37 +195,56 @@ namespace StructFurnitureShop
             Console.WriteLine("***********************");
         }
 
-        /*static double PrintClassFurniture(ref Furniture furniture) // выборка класса
-        {
-            ClassFurniture classFurniture;
 
-            Console.WriteLine("Введите число от 1 до 5");
-            double numbs = double.Parse(Console.ReadLine());
+        static void PrintClassFurniture(ref Furniture furniture)
+        { 
+            
+        int menuPoint = InputInt("Выберите позицию в меню: ");
 
-            if (numbs == 1)
+            switch (menuPoint)
             {
-                classFurniture = ClassFurniture.Economy;
+                case 1:
+                    {
+                        Console.Write("Введите класс ");
+                       int newClassFurniture = int.Parse(Console.ReadLine());
+                       int classFurniture = ClassFurniture.Economy;
+                    }
+                    break;
             }
-            else if (numbs == 2)
-            {
-                classFurniture = ClassFurniture.MiddleClass;
-            }
-            else if (numbs == 3)
-            {
-                classFurniture = ClassFurniture.Premium;
-            }
-            else if (numbs == 4)
-            {
-                classFurniture = ClassFurniture.Luxury;
-            }
-            else if (numbs == 5)
-            {
-                classFurniture = ClassFurniture.Deluxury;
-            }
-            return classFurniture;
-        }*/
 
-        static void PrintManyFutnitureToFile(Furniture[] furnitures, string fileName)
+        }
+            /*
+           static int PrintClassFurniture(ref Furniture furniture) // выборка класса
+            {
+                ClassFurniture classFurniture;
+
+                Console.WriteLine("Введите число от 1 до 5");
+                int number = int.Parse(Console.ReadLine());
+
+                if (number == 1)
+                {
+                    classFurniture = ClassFurniture.Economy;
+                }
+                else if (number == 2)
+                {
+                    classFurniture = ClassFurniture.MiddleClass;
+                }
+                else if (number == 3)
+                {
+                    classFurniture = ClassFurniture.Premium;
+                }
+                else if (number == 4)
+                {
+                    classFurniture = ClassFurniture.Luxury;
+                }
+                else if (number == 5)
+                {
+                    classFurniture = ClassFurniture.Deluxury;
+                }
+                return classFurniture;
+            }
+            */
+            static void PrintManyFutnitureToFile(Furniture[] furnitures, string fileName)
         {
             StreamWriter writer = new StreamWriter(fileName);
 
@@ -243,7 +262,7 @@ namespace StructFurnitureShop
             {
                 for (int i = 0; i < furnitures.Length; i++)
                 {
-                    writer.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}", furnitures[i].Id, furnitures[i].Name, furnitures[i].Weight, furnitures[i].Class, furnitures[i].Rating);
+                    writer.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}", furnitures[i].Id, furnitures[i].Name, furnitures[i].Weight, furnitures[i].classFurniture, furnitures[i].Rating);
                 }
             }
             writer.Close();
@@ -260,7 +279,7 @@ namespace StructFurnitureShop
                 writer.WriteLine(furnitures[i].Id);
                 writer.WriteLine(furnitures[i].Name);
                 writer.WriteLine(furnitures[i].Weight);
-                writer.WriteLine(furnitures[i].Class);
+                writer.WriteLine(furnitures[i].classFurniture);
                 writer.WriteLine(furnitures[i].Rating);
             }
 
