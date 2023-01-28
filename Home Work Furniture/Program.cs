@@ -29,13 +29,15 @@ namespace StructFurnitureShop
 
     class Program
     {
-        static int Current_ID = 0;
+
         struct Furniture
         {
+            public static int Current_ID = 0;
+
             public int Id;
             public string Name;
             public double Weight;
-            public string Class;
+            public double Class;
             public double Rating;
 
         }
@@ -53,6 +55,38 @@ namespace StructFurnitureShop
 
             furnitures = newArray;
 
+        }
+
+        static bool InputBool(string message) //проверка булевская
+        {
+            bool inputResult;
+            bool b;
+            do
+            {
+                Console.Write(message);
+                inputResult = bool.TryParse(Console.ReadLine(), out b);
+            } while (!inputResult);
+            return b;
+
+        }
+        static double InputDouble(string message) //проверка double
+        {
+            bool inputResult;
+            double number;
+
+            do
+            {
+                Console.Write(message);
+                inputResult = double.TryParse(Console.ReadLine(), out number);
+            } while (!inputResult || number < 0);
+
+            return number;
+        }
+
+        static string InputString(string message) //проверка на текст
+        {
+            Console.Write(message);
+            return Console.ReadLine();
         }
         #endregion
 
@@ -105,37 +139,46 @@ namespace StructFurnitureShop
             return maxWeigth;
         }
 
-        static Furniture CreateFurniture() //ввод элемента мебели
+        static Furniture CreateFurniture(bool isNewId) //ввод элемента мебели
         {
 
             Furniture furniture;
+            if (isNewId)
+            {
+                Furniture.Current_ID++;
+                furniture.Id = Furniture.Current_ID;
+            }
+            else
+            {
+                furniture.Id = 0;
+            }
+            furniture.Name = InputString("Введите название мебели: ");
+            furniture.Weight = InputDouble("Введите вес: ");
+            furniture.Class = InputDouble("Выберите класс мебели: \n 1. Эконом \n 2. Средний класс \n 3. Премиум \n 4. Люкс \n 5. ДеЛюкс \n");
+            furniture.Rating = InputDouble("Введите рейтинг покупателей: ");
 
-            Current_ID++;
-            furniture.Id = Current_ID;
+            return furniture;
+        }
 
-            Console.Write("Введите название мебели: ");  //input создать
-            furniture.Name = Console.ReadLine();
-
-            Console.Write("Введите вес: ");
-            furniture.Weight = double.Parse(Console.ReadLine());
-
-            Console.Write("Выберите класс мебели: ");
-            furniture.Class = Console.ReadLine();
-
-            Console.Write("Введите рейтинг покупателей: ");
-            furniture.Rating = double.Parse(Console.ReadLine());
-
+        static Furniture CreateEmptyFurniture()
+        {
+            Furniture furniture;
+            furniture.Id = 0;
+            furniture.Name = "";
+            furniture.Weight = 0;
+            furniture.Class = 0;
+            furniture.Rating = 0;
             return furniture;
         }
 
         static void PrintFurniture(Furniture furniture) //печать 1го элемента(любой)
         {
-            Console.WriteLine("{0,3}{1,20}{2,10}{3,10}{4,5},furniture.Id, furniture.Name, furniture.Weigth, furniture.Class, furniture.Rating");
+            Console.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}",furniture.Id, furniture.Name, furniture.Weight, furniture.Class, furniture.Rating);
         }
 
         static void PrintManyFurnitures(Furniture[] furnitures) //печать всех элементов(весь перечень)
         {
-            Console.WriteLine("{0,3}{1,20}{2,10}{3,10}{4,5}", "ИД", "Название", "Вес(кг)", "Класс мебели", "Рейтинг покупателей");
+            Console.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,-5}", "ИД", "Название", "Вес(кг)", "Класс мебели", "Рейтинг покупателей");
 
             if (furnitures == null)
             {
@@ -151,63 +194,83 @@ namespace StructFurnitureShop
 
             Console.WriteLine("***********************");
         }
-        /*
-        static void PrintClassFurniture (Furniture furniture) // выборка класса
-        {
-        ClassFurniture classFurniture;
 
-        if (Console.ReadLine() == 1)
+        /*static double PrintClassFurniture(ref Furniture furniture) // выборка класса
         {
-        classFurniture = ClassFurniture.Economy;
-        }
-        else if (Conosole.ReadLine() == 2)
-        {
-        classFurniture = ClassFurniture.MiddleClass;
-        }
-        else if (Conosole.ReadLine() == 3)
-        {
-        classFurniture = ClassFurniture.Premium;
-        }
-        else if (Conosole.ReadLine() == 4)
-        {
-        classFurniture
-        Furniture.id
-        furniture.Id
-        = ClassFurniture.Luxury;
-        }
-        else if (Conosole.ReadLine() == 5)
-        {
-        classFurniture = ClassFurniture.Deluxury;
-        }
-        return classFurniture;
-        }
+            ClassFurniture classFurniture;
 
-        static void OutputClassFurniture(ClassFurniture classFurniture, Furniture[] furnitures) // вывод на экран класса мебели
-        {
-            switch (furnitures)
+            Console.WriteLine("Введите число от 1 до 5");
+            double numbs = double.Parse(Console.ReadLine());
+
+            if (numbs == 1)
             {
-                case 1:
-                    {
-                    classFurniture = ClassFurniture.Economy;
-                        Console.WriteLine("Выберите класс эконом");
-                        Console.ReadLine
-                    }
+                classFurniture = ClassFurniture.Economy;
+            }
+            else if (numbs == 2)
+            {
+                classFurniture = ClassFurniture.MiddleClass;
+            }
+            else if (numbs == 3)
+            {
+                classFurniture = ClassFurniture.Premium;
+            }
+            else if (numbs == 4)
+            {
+                classFurniture = ClassFurniture.Luxury;
+            }
+            else if (numbs == 5)
+            {
+                classFurniture = ClassFurniture.Deluxury;
+            }
+            return classFurniture;
+        }*/
 
-                    break;
+        static void PrintManyFutnitureToFile(Furniture[] furnitures, string fileName)
+        {
+            StreamWriter writer = new StreamWriter(fileName);
 
+            writer.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,-5}", "ИД", "Название", "Вес(кг)", "Класс мебели", "Рейтинг покупателей");
 
+            if (furnitures == null)
+            {
+                writer.WriteLine("Таблица мебели пуста");
+            }
+            else if (furnitures.Length == 0)
+            {
+                writer.WriteLine("Таблица мебели пуста");
+            }
+            else
+            {
+                for (int i = 0; i < furnitures.Length; i++)
+                {
+                    writer.WriteLine("{0,-5}{1,-20}{2,-10}{3,-15}{4,5}", furnitures[i].Id, furnitures[i].Name, furnitures[i].Weight, furnitures[i].Class, furnitures[i].Rating);
+                }
+            }
+            writer.Close();
+        }
+        static void SaveManyFurnitureToFile(Furniture[] furnitures, string fileName)
+        {
+            StreamWriter writer = new StreamWriter(fileName);
+
+            writer.WriteLine(furnitures.Length);
+            writer.WriteLine(Furniture.Current_ID);
+
+            for (int i = 0; i < furnitures.Length; i++)
+            {
+                writer.WriteLine(furnitures[i].Id);
+                writer.WriteLine(furnitures[i].Name);
+                writer.WriteLine(furnitures[i].Weight);
+                writer.WriteLine(furnitures[i].Class);
+                writer.WriteLine(furnitures[i].Rating);
             }
 
-                
-
-
+            writer.Close();
         }
-       */
         #endregion
 
         #region Основные функции
 
-        static Furniture[] FindFurnituresFromMinToMaxWeigth(Furniture[] furnitures, double mixWeigth, double maxWeigth)
+        static Furniture[] FindFurnituresFromMinToMaxWeigth(Furniture[] furnitures, double mixWeigth, double maxWeigth) //Поиск мебели от мин до макс веса
         {
             Furniture[] findedFurnitures = null;
 
@@ -224,7 +287,7 @@ namespace StructFurnitureShop
         #endregion
 
         #region Сортировка
-        static void SortFurnituresByWeigth(Furniture[] furnitures)
+        static void SortFurnituresByWeigth(Furniture[] furnitures) //Соритировка по Весу
         {
             Furniture temp;
             bool sort;
@@ -249,14 +312,47 @@ namespace StructFurnitureShop
             } while (!sort);
         }
 
+        static void SortFurnituresByRating(Furniture[] furnitures) //Соритировка по Рейтингу
+        {
+            Furniture temp;
+            bool sort;
+            int offset = 0;
+
+            do
+            {
+                sort = true;
+
+                for (int i = 0; i < furnitures.Length - 1 - offset; i++)
+                {
+                    if (furnitures[i + 1].Rating < furnitures[i].Rating)
+                    {
+                        temp = furnitures[i];
+                        furnitures[i] = furnitures[i + 1];
+                        furnitures[i + 1] = temp;
+
+                        sort = false;
+                    }
+                }
+
+            } while (!sort);
+        }
+
         #endregion
 
         #region Методы работы с интерфейсом
-
-        static void PrintMenu() // Интерфейс меню
+        static void InMemu()
+        {
+            Console.WriteLine("1.Выберите класс");
+        }
+        static void PrintMenu() // Интерфейс меню    
         {
             Console.WriteLine("1. Добавление новой позиции");
-            Console.WriteLine("2. Сортировка мебели от минимального до максимального веса");
+            Console.WriteLine("2. Поиск мебели от минимального до максимального веса");
+            Console.WriteLine("3. Сортировка мебели по весу");
+            Console.WriteLine("4. Сортировка мебели по ретингу покупателей");
+            Console.WriteLine("5. Добавление таблицы в файл .txt");
+            Console.WriteLine("6. Сохранение таблицы в файл .txt");
+
             Console.WriteLine("0. Выход из программы");
         }
 
@@ -294,9 +390,10 @@ namespace StructFurnitureShop
 
                 switch (menuPoint)
                 {
+
                     case 1:
                         {
-                            Furniture addedFurniture = CreateFurniture();
+                            Furniture addedFurniture = CreateFurniture(true);
                             AddNewFurniture(ref furnitures, addedFurniture);
                             continue;
                         }
@@ -315,6 +412,32 @@ namespace StructFurnitureShop
                             Furniture[] findedFurnitures = FindFurnituresFromMinToMaxWeigth(furnitures, minWeigth, maxWeigth);
 
                             PrintManyFurnitures(findedFurnitures);
+                        }
+                        break;
+
+                    case 3:
+                        {
+                            SortFurnituresByWeigth(furnitures);
+                        }
+                        break;
+
+                    case 4:
+                        {
+                            SortFurnituresByRating(furnitures);
+                        }
+                        break;
+
+                    case 5:
+                        {
+                            string fileName = InputString("Введите название файла: ");
+                            PrintManyFutnitureToFile(furnitures, fileName);
+                        }
+                        break;
+
+                    case 6:
+                        {
+                            string fileName = InputString("Введите название файла: ");
+                            SaveManyFurnitureToFile(furnitures, fileName);
                         }
                         break;
 
