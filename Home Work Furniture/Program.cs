@@ -160,7 +160,7 @@ namespace StructFurnitureShop
             return furniture;
         }
 
-        static Furniture CreateEmptyFurniture()
+        /*static Furniture CreateEmptyFurniture()
         {
             Furniture furniture;
             furniture.Id = 0;
@@ -169,7 +169,7 @@ namespace StructFurnitureShop
             furniture.classFurniture = 0;
             furniture.Rating = 0;
             return furniture;
-        }
+        }*/
 
         static void PrintFurniture(Furniture furniture) //печать 1го элемента(любой)
         {
